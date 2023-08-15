@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+
+spring:
+  swagger2:
+    enabled: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  application:
+    name: project01
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://124.71.159.79:3306/project
+      username: root
+      password: Neta@520
+
+jwt:
+  auth:
+    secret: SecretKey
+    expiration-time: 18000000
+
+user:
+  default-pwd: 111111
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  row-bounds-with-count: true
+  offset-as-page-num: true
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com.homemylove.mapper: debug

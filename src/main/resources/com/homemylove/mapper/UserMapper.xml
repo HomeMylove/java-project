@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.User">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="is_lock" jdbcType="CHAR" property="isLock" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="add_user" jdbcType="BIGINT" property="addUser" />
+    <result column="edit_user" jdbcType="BIGINT" property="editUser" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.homemylove.entities.User" useGeneratedKeys="true">
+    insert into sys_user (user_name, password, real_name, 
+      sex, mobile, email, is_lock, 
+      dept_id, role_id, add_user, 
+      edit_user, add_time, edit_time
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=CHAR}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{isLock,jdbcType=CHAR}, 
+      #{deptId,jdbcType=BIGINT}, #{roleId,jdbcType=INTEGER}, #{addUser,jdbcType=BIGINT}, 
+      #{editUser,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{editTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.User">
+    update sys_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      is_lock = #{isLock,jdbcType=CHAR},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      role_id = #{roleId,jdbcType=INTEGER},
+      add_user = #{addUser,jdbcType=BIGINT},
+      edit_user = #{editUser,jdbcType=BIGINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateUser">
+    update sys_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+        real_name = #{realName,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=CHAR},
+        role_id = #{roleId,jdbcType=INTEGER},
+        mobile = #{mobile,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        edit_user = #{editUser,jdbcType=BIGINT},
+        edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="resetPwd">
+    update sys_user
+    set password = #{pwd,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select user_id, user_name, password, real_name, sex, mobile, email, is_lock, dept_id, 
+    role_id, add_user, edit_user, add_time, edit_time
+    from sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, user_name, password, real_name, sex, mobile, email, is_lock, dept_id, 
+    role_id, add_user, edit_user, add_time, edit_time
+    from sys_user
+  </select>
+  <select id="getUserByUsernameAndPwd" resultType="com.homemylove.entities.User">
+    select user_id,user_name,real_name from sys_user where user_name=#{username} and password=#{password};
+  </select>
+    <select id="getUserListByParams" resultType="com.homemylove.entities.User">
+      select user_id,user_name,real_name,sex,mobile,email,is_lock,dept_id,role_id,add_user,edit_user,add_time,edit_time
+      from sys_user
+      <where>
+        <if test="username != null">
+          user_name like concat('%',#{username},'%')
+        </if>
+        <if test="mobile != null">
+          and mobile like concat('%',#{mobile},'%')
+        </if>
+        <if test="isLock != null">
+          and is_lock = #{isLock}
+        </if>
+
+      </where>
+    </select>
+</mapper>
