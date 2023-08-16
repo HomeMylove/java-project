@@ -23,16 +23,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserList(String username, String mobile, int page, int limit, String isLock) {
+    public PageInfo<User> getUserList(String username, String mobile, int page, int limit, String isLock) {
         PageHelper.startPage(page,limit);
         // 检查参数
         if(username != null) username = username.trim();
         if(mobile != null) mobile = mobile.trim();
         if(isLock != null && (!isLock.equals("Y") && !isLock.equals("N"))) isLock = null;
         List<User> list = userMapper.getUserListByParams(username, mobile, isLock);
-        PageInfo<User> pageInfo = new PageInfo<>(list);
+        return new PageInfo<>(list);
+    }
 
-        return pageInfo.getList();
+    /**
+     * 根据id查询用户名
+     * @param userId 用户id
+     * @return 用户
+     */
+    @Override
+    public User getUserNameById(Long userId) {
+        return userMapper.getUserNameById(userId);
     }
 
     @Override
@@ -55,6 +63,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteUser(Long delId) {
         return userMapper.deleteByPrimaryKey(delId) > 0;
+    }
+
+    @Override
+    public boolean userNameExists(String userName) {
+        return userMapper.countUserName(userName) > 0;
     }
 
 

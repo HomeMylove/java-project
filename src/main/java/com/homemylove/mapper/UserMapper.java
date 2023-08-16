@@ -2,7 +2,6 @@ package com.homemylove.mapper;
 
 import com.homemylove.entities.User;
 import java.util.List;
-import java.util.Map;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Long userId);
@@ -40,4 +39,14 @@ public interface UserMapper {
     int updateUser(User user);
 
     int resetPwd(Long userId, String pwd);
+
+    /**
+     * 根据id查询用户名
+     *
+     * @param userId 用户id
+     * @return 用户
+     */
+    User getUserNameById(Long userId);
+
+    Integer countUserName(String userName);
 }

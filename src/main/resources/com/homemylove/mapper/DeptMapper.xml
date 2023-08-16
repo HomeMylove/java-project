@@ -34,6 +34,14 @@
       add_time = #{addTime,jdbcType=TIMESTAMP}
     where dept_id = #{deptId,jdbcType=BIGINT}
   </update>
+  <update id="updateDept">
+    update sys_dept
+    set dept_name = #{deptName,jdbcType=VARCHAR},
+        dept_no = #{deptNo,jdbcType=VARCHAR},
+        edit_user = #{editUser,jdbcType=BIGINT},
+        edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select dept_id, dept_name, dept_no, parent_id, edit_user, add_user, edit_time, add_time
     from sys_dept
@@ -42,5 +50,27 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select dept_id, dept_name, dept_no, parent_id, edit_user, add_user, edit_time, add_time
     from sys_dept
+  </select>
+    <select id="getDeptListByParams" resultType="com.homemylove.entities.Dept">
+      select dept_id,dept_name,dept_no,edit_time,edit_user from sys_dept
+      <where>
+        <if test="deptName != null">
+          dept_name like concat("%",#{deptName},"%")
+        </if>
+        <if test="deptNo != null">
+          and dept_no like concat("%",#{deptNo},"%")
+        </if>
+      </where>
+    </select>
+  <select id="hasDept" resultType="java.lang.Integer">
+    select count(*) from sys_dept
+    <where>
+      <if test="deptName != null">
+        dept_name = #{deptName}
+      </if>
+      <if test="deptNo != null">
+        or dept_no = #{deptNo}
+      </if>
+    </where>
   </select>
 </mapper>

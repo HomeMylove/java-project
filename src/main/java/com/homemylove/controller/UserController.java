@@ -1,5 +1,6 @@
 package com.homemylove.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.homemylove.auth.AuthInfo;
 
 import com.homemylove.auth.Authenticator;
@@ -10,6 +11,7 @@ import com.homemylove.resp.Resp;
 import com.homemylove.service.DeptService;
 import com.homemylove.service.UserService;
 import com.homemylove.utils.JwtUtil;
+import com.homemylove.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -78,13 +80,14 @@ public class UserController {
                             @RequestParam("page") int page,
                              @RequestParam("limit")int limit){
         // 查询 user
-        List<User> users = userService.getUserList(username, mobile, page, limit, isLock);
+        PageInfo<User> pageInfo = userService.getUserList(username, mobile, page, limit, isLock);
+        List<User> users = pageInfo.getList();
 
         // 查询公司，生成vo
         List<UserVo> userVos = users.stream().map(user -> UserVoConvert.INSTANCE.userToUserVo(user, deptService.getDept(user.getDeptId()))).toList();
         HashMap<String, Object> data = new HashMap<>();
 
-        data.put("count",users.size());
+        data.put("count",pageInfo.getTotal());
         data.put("list",userVos);
 
         // 创建 resp
@@ -107,39 +110,55 @@ public class UserController {
                          @RequestParam("userSex") String sex,
                          @RequestParam("token") String token){
 
-        // 认证
-        Long edit = authenticator.auth(token).getId();
-        Date time = new Date();
+        username = StringUtils.trimIfNotNull(username);
+        // 用户名是否存在
+        boolean exists;
+        // 结果
+        boolean result;
+        // 提示
+        String msg;
+        int code;
+        // 什么情况下可以写
+        if(userId != null || !(exists = userService.userNameExists(username))){
+           // 如果携带 id，一定可以写-->编辑
+            // 就算没有 id，用户名不存在也可以写-->新增
+            User user = new User();
 
-        User user = new User();
-        user.setUserId(userId);
-        user.setUserName(username);
-        user.setRealName(realName);
-        user.setRoleId(roleId);
-        user.setMobile(mobile);
-        user.setEmail(email);
-        user.setSex(sex);
+            // 认证
+            Long edit = authenticator.auth(token).getId();
+            Date time = new Date();
 
-        if(userId == null){
-            // 新增
-            user.setAddUser(edit);
-            user.setAddTime(time);
-            user.setIsLock("N");
-        }
-        user.setEditUser(edit);
-        user.setEditTime(time);
+            if(userId == null){
+                // 新增
+                user.setAddUser(edit);
+                user.setAddTime(time);
+                user.setIsLock("N");
+            }
+            user.setEditUser(edit);
+            user.setEditTime(time);
 
-        boolean result = userService.saveUser(user);
-        Resp resp = new Resp();
-        if(result){
-            resp.setSuccess(true);
-            resp.setCode(200);
-            resp.setMsg("添加用户成功");
+            user.setUserId(userId);
+            user.setUserName(username);
+            user.setRealName(realName);
+            user.setRoleId(roleId);
+            user.setMobile(mobile);
+            user.setEmail(email);
+            user.setSex(sex);
+
+            result = userService.saveUser(user);
+            msg = result ? "添加用户成功" : "添加用户失败";
+            code = result ? 200 : 500;
         }else {
-            resp.setSuccess(false);
-            resp.setCode(500);
-            resp.setMsg("添加用户失败");
+            // id 也没有 用户名也存在 --> 不写
+            result = false;
+            msg = "用户名已存在";
+            code = 409;
         }
+
+        Resp resp = new Resp();
+        resp.setSuccess(result);
+        resp.setCode(code);
+        resp.setMsg(msg);
         return resp;
     }
 
@@ -183,6 +202,4 @@ public class UserController {
         }
         return resp;
     }
-
-
 }

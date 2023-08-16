@@ -97,4 +97,15 @@
 
       </where>
     </select>
+    <select id="getUserNameById" resultType="com.homemylove.entities.User">
+      select user_name from sys_user
+      <where>
+        <if test="userId != null">
+          user_id = #{userId}
+        </if>
+      </where>
+    </select>
+  <select id="countUserName" resultType="java.lang.Integer">
+    select count(*) from sys_user where user_name = #{userName}
+  </select>
 </mapper>
