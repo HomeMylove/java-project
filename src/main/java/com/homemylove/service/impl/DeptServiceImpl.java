@@ -35,14 +35,15 @@ public class DeptServiceImpl implements DeptService {
     }
 
     /**
-     * 部门名称或代码是否存在
+     * 除了deptId以外的部门名称或代码是否存在
      * @param deptName 部门名称
      * @param deptNo 部门代码
+     * @param deptId 部门id，如果有，排除它
      * @return 是否存在
      */
     @Override
-    public boolean deptExists(String deptName, String deptNo) {
-        return deptMapper.hasDept(deptName,deptNo) > 0;
+    public boolean existExceptId(String deptName, String deptNo,Long deptId) {
+        return deptMapper.hasDept(deptName,deptNo,deptId) > 0;
     }
 
     @Override

@@ -71,6 +71,9 @@
       <if test="deptNo != null">
         or dept_no = #{deptNo}
       </if>
+    <if test="deptId != null">
+      and dept_id != #{deptId}
+    </if>
     </where>
   </select>
 </mapper>

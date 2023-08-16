@@ -48,5 +48,5 @@ public interface UserMapper {
      */
     User getUserNameById(Long userId);
 
-    Integer countUserName(String userName);
+    Integer countUserName(String userName,Long userId);
 }

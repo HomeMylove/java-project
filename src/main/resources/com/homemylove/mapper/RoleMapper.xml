@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.Role">
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="system_no" jdbcType="VARCHAR" property="systemNo" />
+    <result column="role_no" jdbcType="VARCHAR" property="roleNo" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="add_user" jdbcType="BIGINT" property="addUser" />
+    <result column="edit_user" jdbcType="BIGINT" property="editUser" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="role_id" keyProperty="roleId" parameterType="com.homemylove.entities.Role" useGeneratedKeys="true">
+    insert into sys_role (system_no, role_no, role_name, 
+      add_user, edit_user, add_time, 
+      edit_time)
+    values (#{systemNo,jdbcType=VARCHAR}, #{roleNo,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, 
+      #{addUser,jdbcType=BIGINT}, #{editUser,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{editTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.Role">
+    update sys_role
+    set system_no = #{systemNo,jdbcType=VARCHAR},
+      role_no = #{roleNo,jdbcType=VARCHAR},
+      role_name = #{roleName,jdbcType=VARCHAR},
+      add_user = #{addUser,jdbcType=BIGINT},
+      edit_user = #{editUser,jdbcType=BIGINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateRole">
+    update sys_role
+    set system_no = #{systemNo,jdbcType=VARCHAR},
+        role_no = #{roleNo,jdbcType=VARCHAR},
+        role_name = #{roleName,jdbcType=VARCHAR},
+        edit_user = #{editUser,jdbcType=BIGINT},
+        edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select role_id, system_no, role_no, role_name, add_user, edit_user, add_time, edit_time
+    from sys_role
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select role_id, system_no, role_no, role_name, add_user, edit_user, add_time, edit_time
+    from sys_role
+  </select>
+    <select id="getRoleListByParams" resultType="com.homemylove.entities.Role">
+      select role_id,system_no,role_name,role_no,edit_user,edit_time from sys_role
+      <where>
+        <if test="roleName != null">
+          role_name like concat("%",#{roleName},"%")
+        </if>
+        <if test="roleNo != null">
+          and role_no like concat("%",#{roleNo},"%")
+        </if>
+      </where>
+    </select>
+  <select id="hasRole" resultType="java.lang.Integer">
+    select count(*) from sys_role
+    <where>
+      <if test="roleName != null">
+        role_name = #{roleName}
+      </if>
+      <if test="roleNo != null">
+        or role_no = #{roleNo}
+      </if>
+        <if test="roleId != null">
+          and role_id != #{roleId}
+        </if>
+    </where>
+  </select>
+</mapper>

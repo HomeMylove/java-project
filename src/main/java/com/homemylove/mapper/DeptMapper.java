@@ -16,7 +16,7 @@ public interface DeptMapper {
 
     List<Dept> getDeptListByParams(String deptName,String deptNo);
 
-    int hasDept(String deptName, String deptNo);
+    int hasDept(String deptName, String deptNo,Long deptId);
 
     int updateDept(Dept dept);
 }

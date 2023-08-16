@@ -111,17 +111,13 @@ public class UserController {
                          @RequestParam("token") String token){
 
         username = StringUtils.trimIfNotNull(username);
-        // 用户名是否存在
-        boolean exists;
         // 结果
         boolean result;
         // 提示
         String msg;
         int code;
         // 什么情况下可以写
-        if(userId != null || !(exists = userService.userNameExists(username))){
-           // 如果携带 id，一定可以写-->编辑
-            // 就算没有 id，用户名不存在也可以写-->新增
+        if(!(userService.userNameExists(username,userId))){
             User user = new User();
 
             // 认证
@@ -149,12 +145,10 @@ public class UserController {
             msg = result ? "添加用户成功" : "添加用户失败";
             code = result ? 200 : 500;
         }else {
-            // id 也没有 用户名也存在 --> 不写
             result = false;
             msg = "用户名已存在";
             code = 409;
         }
-
         Resp resp = new Resp();
         resp.setSuccess(result);
         resp.setCode(code);

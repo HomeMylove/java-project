@@ -70,24 +70,20 @@ public class DeptController {
                          @RequestParam("token") String token){
         deptName = StringUtils.trimIfNotNull(deptName);
         deptNo = StringUtils.trimIfNotNull(deptNo);
-        // 名称或代码是否存在
-        boolean exists;
         // 结果
         boolean result;
         // 提示
         String msg;
         int code;
         // 什么情况下可以写
-        if(deptId != null || !(exists = deptService.deptExists(deptName,deptNo))){
-            // 如果携带 id，一定可以写-->编辑
-            // 就算没有 id，用户名不存在也可以写-->新增
+        // 不存在就能写
+        if(!deptService.existExceptId(deptName,deptNo,deptId)){
             Dept dept = new Dept();
-
             // 认证
             Long edit = authenticator.auth(token).getId();
             Date time = new Date();
 
-            if(deptService == null){
+            if(deptId == null){
                 // 新增
                 dept.setAddUser(edit);
                 dept.setAddTime(time);
@@ -103,7 +99,7 @@ public class DeptController {
             msg = result ? "添加部门成功" : "添加部门失败";
             code = result ? 200 : 500;
         }else {
-            // id 也没有 名也存在 --> 不写
+            // 存在了就不能写
             result = false;
             msg = "部门名称或部门代码已存在";
             code = 409;

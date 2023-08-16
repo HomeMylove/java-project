@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean userNameExists(String userName) {
-        return userMapper.countUserName(userName) > 0;
+    public boolean userNameExists(String userName,Long userId) {
+        return userMapper.countUserName(userName,userId) > 0;
     }
 
 

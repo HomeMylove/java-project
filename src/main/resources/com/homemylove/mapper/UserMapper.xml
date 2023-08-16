@@ -106,6 +106,14 @@
       </where>
     </select>
   <select id="countUserName" resultType="java.lang.Integer">
-    select count(*) from sys_user where user_name = #{userName}
+    select count(*) from sys_user
+    <where>
+      <if test="userName != null">
+        user_name = #{userName}
+      </if>
+      <if test="userId != null">
+        and user_id != #{userId}
+      </if>
+    </where>
   </select>
 </mapper>
