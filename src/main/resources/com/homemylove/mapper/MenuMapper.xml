@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.Menu">
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="has_third" jdbcType="VARCHAR" property="hasThird" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="order_value" jdbcType="INTEGER" property="orderValue" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteMenu">
+    delete from menu
+    where menu_id = #{id}
+    or pid = #{id}
+  </delete>
+  <insert id="insert" keyColumn="menu_id" keyProperty="menuId" parameterType="com.homemylove.entities.Menu" useGeneratedKeys="true">
+    insert into menu (menu_id,icon, menu_name, has_third,
+      url, pid, order_value
+      )
+    values (#{menuId},#{icon,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{hasThird,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{pid,jdbcType=BIGINT}, #{orderValue,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.Menu">
+    update menu
+    set icon = #{icon,jdbcType=VARCHAR},
+      menu_name = #{menuName,jdbcType=VARCHAR},
+      has_third = #{hasThird,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=BIGINT},
+      order_value = #{orderValue,jdbcType=INTEGER}
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select menu_id, icon, menu_name, has_third, url, pid, order_value
+    from menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select menu_id, icon, menu_name, has_third, url, pid, order_value
+    from menu order by order_value
+  </select>
+  <select id="getAllNode" resultType="com.homemylove.entities.vo.NodeVo">
+    select menu_id id,menu_name name from menu where pid is null;
+  </select>
+</mapper>

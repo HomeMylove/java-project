@@ -12,7 +12,7 @@ import java.util.Map;
 @Data
 public class Resp {
 
-    private boolean success;
+    private boolean success  = true;
 
     private Map<String,Object> data;
 
