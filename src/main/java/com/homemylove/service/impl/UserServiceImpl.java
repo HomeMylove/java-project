@@ -70,5 +70,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.countUserName(userName,userId) > 0;
     }
 
+    @Override
+    public boolean changeLockType(Long userId, String isLock) {
+        return userMapper.changeLockType(userId,isLock);
+    }
+
 
 }

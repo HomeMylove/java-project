@@ -33,8 +33,8 @@
         <!--DAO生成位置-->
         <javaClientGenerator targetPackage="${package.name}.mapper" targetProject="src/main/java" type="XMLMAPPER"/>
 
-        <table tableName="menu" domainObjectName="Menu">
-            <generatedKey column="menu_id" sqlStatement="JDBC"/>
+        <table tableName="role_permissions" domainObjectName="RolePermissions">
+            <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
     </context>
 </generatorConfiguration>

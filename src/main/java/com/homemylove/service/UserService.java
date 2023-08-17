@@ -19,4 +19,6 @@ public interface UserService {
     boolean deleteUser(Long delId);
 
     boolean userNameExists(String userName,Long userId);
+
+    boolean changeLockType(Long userId,String isLock);
 }

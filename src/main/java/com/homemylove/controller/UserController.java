@@ -196,4 +196,13 @@ public class UserController {
         }
         return resp;
     }
+
+    @GetMapping("/User/lock")
+    @ApiOperation("修改状态")
+    public Resp userLock(@RequestParam("userId") Long userId,
+                         @RequestParam("lock") String lock){
+        Resp resp = new Resp();
+        resp.setSuccess(userService.changeLockType(userId,lock));
+        return resp;
+    }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.Permission">
+    <id column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="lay_checked" jdbcType="BIT" property="layChecked" />
+    <result column="add_user" jdbcType="BIGINT" property="addUser" />
+    <result column="edit_user" jdbcType="BIGINT" property="editUser" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from permission
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="permission_id" keyProperty="permissionId" parameterType="com.homemylove.entities.Permission" useGeneratedKeys="true">
+    insert into permission (permission_name, permission, lay_checked, 
+      add_user, edit_user, add_time, 
+      edit_time)
+    values (#{permissionName,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, #{layChecked,jdbcType=BIT}, 
+      #{addUser,jdbcType=BIGINT}, #{editUser,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{editTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.Permission">
+    update permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      lay_checked = #{layChecked,jdbcType=BIT},
+      add_user = #{addUser,jdbcType=BIGINT},
+      edit_user = #{editUser,jdbcType=BIGINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </update>
+  <update id="updatePermission">
+    update permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+        permission = #{permission,jdbcType=VARCHAR},
+        edit_user = #{editUser,jdbcType=BIGINT},
+        edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select permission_id, permission_name, permission, lay_checked, add_user, edit_user, 
+    add_time, edit_time
+    from permission
+    where permission_id = #{permissionId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select permission_id, permission_name, permission, lay_checked, add_user, edit_user, 
+    add_time, edit_time
+    from permission
+  </select>
+    <select id="queryPermissions" resultType="com.homemylove.entities.Permission">
+      select permission_name,permission,permission_id,lay_checked,edit_user,edit_time
+      from permission
+      <where>
+        <if test="permissionName != null">
+          permission_name like concat('%',#{permissionName},'%')
+        </if>
+        <if test="permission != null">
+          and permission like concat('%',#{permission},'%')
+        </if>
+        <if test="roleId != null">
+          and permission_id in (select permission_id from role_permissions where role_id = #{roleId})
+        </if>
+      </where>
+    </select>
+</mapper>

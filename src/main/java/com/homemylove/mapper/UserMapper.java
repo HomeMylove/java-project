@@ -49,4 +49,6 @@ public interface UserMapper {
     User getUserNameById(Long userId);
 
     Integer countUserName(String userName,Long userId);
+
+    boolean changeLockType(Long userId, String isLock);
 }

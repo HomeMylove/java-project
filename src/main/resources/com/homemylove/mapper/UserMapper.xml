@@ -67,7 +67,10 @@
     set password = #{pwd,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <update id="changeLockType">
+      update sys_user set is_lock = #{isLock} where user_id = #{userId}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select user_id, user_name, password, real_name, sex, mobile, email, is_lock, dept_id, 
     role_id, add_user, edit_user, add_time, edit_time
     from sys_user

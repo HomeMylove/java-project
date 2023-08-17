@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.RolePermissionsMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.RolePermissions">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="add_user" jdbcType="BIGINT" property="addUser" />
+    <result column="edit_user" jdbcType="BIGINT" property="editUser" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from role_permissions
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.homemylove.entities.RolePermissions" useGeneratedKeys="true">
+    insert into role_permissions (role_id, permission_id, add_user, 
+      edit_user, add_time, edit_time
+      )
+    values (#{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT}, #{addUser,jdbcType=BIGINT}, 
+      #{editUser,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{editTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.RolePermissions">
+    update role_permissions
+    set role_id = #{roleId,jdbcType=BIGINT},
+      permission_id = #{permissionId,jdbcType=BIGINT},
+      add_user = #{addUser,jdbcType=BIGINT},
+      edit_user = #{editUser,jdbcType=BIGINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      edit_time = #{editTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, role_id, permission_id, add_user, edit_user, add_time, edit_time
+    from role_permissions
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, role_id, permission_id, add_user, edit_user, add_time, edit_time
+    from role_permissions
+  </select>
+</mapper>

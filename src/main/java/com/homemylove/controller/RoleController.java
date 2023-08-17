@@ -135,4 +135,10 @@ public class RoleController {
 
     }
 
+    @GetMapping("/RoleRight/tree/{id}")
+    @ApiOperation("菜单权限(获取)")
+    public Resp roleRight(@PathVariable("id") Long id){
+        return null;
+    }
+
 }

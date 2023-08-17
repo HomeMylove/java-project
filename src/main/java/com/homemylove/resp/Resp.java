@@ -18,6 +18,6 @@ public class Resp {
 
     private String msg;
 
-    private int code;
+    private int code = 200;
 
 }
