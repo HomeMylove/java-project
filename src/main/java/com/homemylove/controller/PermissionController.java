@@ -6,16 +6,14 @@ import com.homemylove.entities.Permission;
 import com.homemylove.entities.vo.PermissionVo;
 import com.homemylove.resp.Resp;
 import com.homemylove.service.PermissionService;
+import com.homemylove.service.RolePermissionsService;
 import com.homemylove.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -29,6 +27,9 @@ public class PermissionController {
 
     @Resource
     private PermissionService permissionService;
+
+    @Resource
+    private RolePermissionsService rolePermissionsService;
 
     @Resource
     private UserService userService;
@@ -64,6 +65,21 @@ public class PermissionController {
         resp.setSuccess(result);
         return resp;
     }
+
+    @PostMapping("/RolePermission/save")
+    @ApiOperation("权限配置")
+    public Resp rolePermissionSave(@RequestParam("roleId") Long roleId,
+                                   @RequestParam("permissionIds") List<Long> permissionIds,
+                                   @RequestParam("token") String token){
+
+        boolean result = rolePermissionsService.saveRolePermission(roleId,permissionIds,token);
+        Resp resp = new Resp();
+        resp.setSuccess(result);
+        return resp;
+
+    }
+
+
 
 
 

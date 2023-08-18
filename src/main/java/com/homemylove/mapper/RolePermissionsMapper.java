@@ -13,4 +13,6 @@ public interface RolePermissionsMapper {
     List<RolePermissions> selectAll();
 
     int updateByPrimaryKey(RolePermissions record);
+
+    Long hasRolePermission(Long roleId, Long permissionId);
 }

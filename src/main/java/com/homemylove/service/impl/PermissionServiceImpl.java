@@ -58,8 +58,6 @@ public class PermissionServiceImpl implements PermissionService {
         per.setEditUser(userId);
         per.setEditTime(time);
 
-        System.out.println("permission:=="+per);
-
         if(permissionId != null){
             return permissionMapper.updatePermission(per) > 0;
         }else {

@@ -4,18 +4,26 @@ import com.github.pagehelper.PageInfo;
 import com.homemylove.auth.Authenticator;
 import com.homemylove.convert.RoleVoConvert;
 import com.homemylove.entities.Role;
+import com.homemylove.entities.vo.MenuVo;
+import com.homemylove.entities.vo.RoleDropDownVo;
+import com.homemylove.entities.vo.RoleMenusVo;
 import com.homemylove.entities.vo.RoleVo;
 import com.homemylove.resp.Resp;
+import com.homemylove.service.MenuService;
 import com.homemylove.service.RoleService;
 import com.homemylove.service.UserService;
 import com.homemylove.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +39,9 @@ public class RoleController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private MenuService menuService;
 
     @Resource
     private Authenticator authenticator;
@@ -137,8 +148,39 @@ public class RoleController {
 
     @GetMapping("/RoleRight/tree/{id}")
     @ApiOperation("菜单权限(获取)")
-    public Resp roleRight(@PathVariable("id") Long id){
-        return null;
+    public Resp roleRightTree(@PathVariable("id") Long id){
+
+        List<RoleMenusVo> roleMenusVos = roleService.getRoleMenus(id);
+
+        Resp resp = new Resp();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("list",roleMenusVos);
+
+        resp.setData(data);
+        return resp;
+    }
+
+    @GetMapping("/Role/dropDown/all")
+    @ApiOperation("获取角色")
+    public Resp roleDropDownAll(){
+        List<RoleDropDownVo> roleDropDownVos = roleService.getRoleDropDownVoList();
+        Resp resp = new Resp();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("list",roleDropDownVos);
+        resp.setData(data);
+        return resp;
+    }
+
+    @PostMapping("/RoleRight/save")
+    @ApiOperation("菜单权限(保存)")
+    public Resp roleRightSave(@RequestParam("roleId") Long roleId,
+                              @RequestParam("moduleIds") List<Long> moduleIds){
+
+        boolean result = roleService.roleRightSave(roleId,moduleIds);
+
+        Resp resp = new Resp();
+        resp.setSuccess(result);
+        return resp;
     }
 
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.homemylove.mapper.RoleMenusMapper">
+  <resultMap id="BaseResultMap" type="com.homemylove.entities.RoleMenus">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="menu_id" jdbcType="BIGINT" property="menuId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from role_menus
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteAllRightByRoleId">
+    delete from role_menus where role_id = #{roleId}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.homemylove.entities.RoleMenus" useGeneratedKeys="true">
+    insert into role_menus (role_id, menu_id)
+    values (#{roleId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.homemylove.entities.RoleMenus">
+    update role_menus
+    set role_id = #{roleId,jdbcType=BIGINT},
+      menu_id = #{menuId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, role_id, menu_id
+    from role_menus
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, role_id, menu_id
+    from role_menus
+  </select>
+    <select id="getRoleMenusByRoleId" resultType="com.homemylove.entities.RoleMenus">
+      select menu_id from role_menus where role_id = #{roleId}
+    </select>
+</mapper>

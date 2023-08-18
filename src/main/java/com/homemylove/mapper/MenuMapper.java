@@ -2,6 +2,7 @@ package com.homemylove.mapper;
 
 import com.homemylove.entities.Menu;
 import com.homemylove.entities.vo.NodeVo;
+import com.homemylove.entities.vo.RoleMenusVo;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface MenuMapper {
     List<NodeVo> getAllNode();
 
     boolean deleteMenu(Long id);
+
 }

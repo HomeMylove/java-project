@@ -70,11 +70,14 @@
         role_name = #{roleName}
       </if>
       <if test="roleNo != null">
-        or role_no = #{roleNo}
+        and role_no = #{roleNo}
       </if>
         <if test="roleId != null">
           and role_id != #{roleId}
         </if>
     </where>
   </select>
+    <select id="getRoleDropDownVoList" resultType="com.homemylove.entities.vo.RoleDropDownVo">
+      select role_name,role_id from sys_role
+    </select>
 </mapper>

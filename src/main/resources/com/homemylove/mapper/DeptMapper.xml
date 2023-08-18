@@ -76,4 +76,7 @@
     </if>
     </where>
   </select>
+    <select id="getDeptDropDown" resultType="com.homemylove.entities.vo.DeptDropDownVo">
+      select dept_id, dept_name from sys_dept;
+    </select>
 </mapper>

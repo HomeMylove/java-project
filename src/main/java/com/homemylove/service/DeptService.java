@@ -2,6 +2,7 @@ package com.homemylove.service;
 
 import com.github.pagehelper.PageInfo;
 import com.homemylove.entities.Dept;
+import com.homemylove.entities.vo.DeptDropDownVo;
 import com.homemylove.mapper.DeptMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,6 @@ public interface DeptService {
     boolean saveDept(Dept dept);
 
     boolean deleteDept(Long delId);
+
+    List<DeptDropDownVo> getDeptDropDown();
 }

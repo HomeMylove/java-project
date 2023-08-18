@@ -1,6 +1,8 @@
 package com.homemylove.mapper;
 
 import com.homemylove.entities.Dept;
+import com.homemylove.entities.vo.DeptDropDownVo;
+
 import java.util.List;
 
 public interface DeptMapper {
@@ -19,4 +21,6 @@ public interface DeptMapper {
     int hasDept(String deptName, String deptNo,Long deptId);
 
     int updateDept(Dept dept);
+
+    List<DeptDropDownVo> getDeptDropDown();
 }

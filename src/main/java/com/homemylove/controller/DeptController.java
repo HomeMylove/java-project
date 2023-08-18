@@ -5,6 +5,7 @@ import com.homemylove.auth.Authenticator;
 import com.homemylove.convert.DeptVoConvert;
 import com.homemylove.entities.Dept;
 import com.homemylove.entities.User;
+import com.homemylove.entities.vo.DeptDropDownVo;
 import com.homemylove.entities.vo.DeptVo;
 import com.homemylove.resp.Resp;
 import com.homemylove.service.DeptService;
@@ -129,6 +130,18 @@ public class DeptController {
             resp.setCode(500);
             resp.setMsg("删除部门失败");
         }
+        return resp;
+    }
+
+    @GetMapping("/Dept/dropDown/all")
+    @ApiOperation("获取部门下拉列表")
+    public Resp deptDropDownAll(){
+
+        List<DeptDropDownVo> deptDropDownVos = deptService.getDeptDropDown();
+        Resp resp = new Resp();
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("list",deptDropDownVos);
+        resp.setData(data);
         return resp;
 
     }

@@ -3,6 +3,7 @@ package com.homemylove.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.homemylove.entities.Dept;
+import com.homemylove.entities.vo.DeptDropDownVo;
 import com.homemylove.mapper.DeptMapper;
 import com.homemylove.service.DeptService;
 import lombok.extern.slf4j.Slf4j;
@@ -60,5 +61,10 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public boolean deleteDept(Long delId) {
         return deptMapper.deleteByPrimaryKey(delId) > 0;
+    }
+
+    @Override
+    public List<DeptDropDownVo> getDeptDropDown() {
+        return deptMapper.getDeptDropDown();
     }
 }

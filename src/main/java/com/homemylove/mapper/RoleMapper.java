@@ -2,6 +2,8 @@ package com.homemylove.mapper;
 
 import com.homemylove.entities.Role;
 import com.homemylove.entities.Role;
+import com.homemylove.entities.vo.RoleDropDownVo;
+
 import java.util.List;
 
 public interface RoleMapper {
@@ -20,4 +22,6 @@ public interface RoleMapper {
     int hasRole(String roleName, String roleNo,Long roleId);
 
     int updateRole(Role role);
+
+    List<RoleDropDownVo> getRoleDropDownVoList();
 }

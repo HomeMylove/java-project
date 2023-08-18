@@ -20,7 +20,7 @@ spring:
 jwt:
   auth:
     secret: SecretKey
-    expiration-time: 18000000
+    expiration-time: 1800000000
 
 user:
   default-pwd: 111111

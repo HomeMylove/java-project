@@ -47,6 +47,6 @@
     from menu order by order_value
   </select>
   <select id="getAllNode" resultType="com.homemylove.entities.vo.NodeVo">
-    select menu_id id,menu_name name from menu where pid is null;
+    select menu_id id,menu_name name from menu where pid is null
   </select>
 </mapper>

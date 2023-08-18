@@ -2,15 +2,25 @@ package com.homemylove.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.homemylove.convert.RoleMenusConvert;
+import com.homemylove.convert.RoleVoConvert;
+import com.homemylove.entities.Menu;
 import com.homemylove.entities.Role;
+import com.homemylove.entities.RoleMenus;
+import com.homemylove.entities.vo.RoleDropDownVo;
+import com.homemylove.entities.vo.RoleMenusVo;
+import com.homemylove.mapper.MenuMapper;
 import com.homemylove.mapper.RoleMapper;
+import com.homemylove.mapper.RoleMenusMapper;
 import com.homemylove.service.RoleService;
 import com.homemylove.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -18,6 +28,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Resource
     private RoleMapper  roleMapper;
+
+    @Resource
+    private MenuMapper menuMapper;
+
+    @Resource
+    private RoleMenusMapper roleMenusMapper;
 
     @Override
     public Role getRole(Long roleId) {
@@ -59,5 +75,63 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean deleteRole(Long delId) {
         return roleMapper.deleteByPrimaryKey(delId) > 0;
+    }
+
+    @Override
+    public List<RoleDropDownVo> getRoleDropDownVoList() {
+        return roleMapper.getRoleDropDownVoList();
+    }
+
+    @Override
+    public List<RoleMenusVo> getRoleMenus(Long id) {
+
+        List<Menu> menus = menuMapper.selectAll();
+        List<RoleMenus> roleMenus = roleMenusMapper.getRoleMenusByRoleId(id);
+
+        // 过滤出父级
+        List<RoleMenusVo> roleMenusVos = menus.stream().filter(menu -> menu.getPid() == null).toList()
+                .stream().map(menu -> {
+                    RoleMenusVo roleMenusVo = RoleMenusConvert.INSTANCE.toRoleMenusVo(menu);
+                    for (RoleMenus roleMenu : roleMenus) {
+                        if (Objects.equals(roleMenu.getMenuId(), roleMenusVo.getId())) {
+                            roleMenusVo.setChecked(true);
+                            break;
+                        }
+                    }
+                    return roleMenusVo;
+                }).toList();
+
+        menus.stream().filter(menu -> menu.getPid() != null).toList()
+                .stream().forEach(menu -> {
+                    RoleMenusVo roleMenusVo = RoleMenusConvert.INSTANCE.toRoleMenusVo(menu);
+                    for (RoleMenus roleMenu : roleMenus) {
+                        if (Objects.equals(roleMenu.getMenuId(), roleMenusVo.getId())) {
+                            roleMenusVo.setChecked(true);
+                            break;
+                        }
+                    }
+                    Long pid = menu.getPid();
+                    for (RoleMenusVo menusVo : roleMenusVos) {
+                        if(Objects.equals(menusVo.getId(), pid)){
+                            if(menusVo.getChildren()==null) menusVo.setChildren(new ArrayList<>());
+                            menusVo.getChildren().add(roleMenusVo);
+                        }
+                    }
+                });
+        return roleMenusVos;
+    }
+
+    @Override
+    public boolean roleRightSave(Long roleId, List<Long> moduleIds) {
+        roleMenusMapper.deleteAllRightByRoleId(roleId);
+
+        int count = 1;
+        for (Long moduleId : moduleIds) {
+            RoleMenus menus = new RoleMenus();
+            menus.setRoleId(roleId);
+            menus.setMenuId(moduleId);
+            count *= roleMenusMapper.insert(menus);
+        }
+        return count == 1;
     }
 }

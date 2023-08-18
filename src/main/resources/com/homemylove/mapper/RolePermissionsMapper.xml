@@ -41,4 +41,8 @@
     select id, role_id, permission_id, add_user, edit_user, add_time, edit_time
     from role_permissions
   </select>
+    <select id="hasRolePermission" resultType="java.lang.Long">
+      select id from role_permissions
+      where role_id = #{roleId} and permission_id = #{permissionId}
+    </select>
 </mapper>
